@@ -90,14 +90,15 @@ div {
   margin: 5px;
   max-width: 1000px;
   max-height: 100px;
-  width: 90%;
+  width: 93%;
   height: 90%;
   padding: 20px;
 }
 
-.reminder p {
-  margin-right: 20px;
+.reminder p{
+  max-width: max-content;
 }
+
 
 .stack {
   border: none;
@@ -149,7 +150,7 @@ footer > p {
   background-color: #778da9;
   padding: 30px;
   max-width: 1100px;
-  width: 90%;
+  width: 95%;
 }
 
 ul {
@@ -183,7 +184,7 @@ ul {
 
 @media (max-width: 850px) {
   .reminder p {
-    font-size: 20px;
+    font-size: 16px;
   }
   .buttons button {
     font-size: 15px;
@@ -203,7 +204,7 @@ ul {
   }
 
   .reminder p {
-    font-size: 20px;
+    font-size: 14px;
   }
   .buttons button {
     font-size: 11px;
