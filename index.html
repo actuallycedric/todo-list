@@ -13,7 +13,7 @@
     />
   </head>
   <body>
-    <div class="greet">
+    <div class="header">
       <h1>to-do list</h1>
       <div class="stack">
         <img src="./logo.png" alt="react logo" />
@@ -37,13 +37,13 @@
     <div class="contact">
       <form>
         <input type="text" placeholder="event name" /><br />
-
-        <input type="text" placeholder="event time" />
         <select>
           <option value="">reminder type:</option>
           <option value="comment">action</option>
           <option value="question">event</option>
         </select>
+
+        <input type="text" placeholder="event time" />
 
         <button>add</button>
       </form>
@@ -51,10 +51,24 @@
       <!--- make this section appear when a button is clicked -->
     </div>
 
+    <div class="header"><h1>currently:</h1></div>
+
     <div class="list">
-      <h2>to do:</h2>
-      <br>
-      <div class="reminder"><p>do homework</p> <button>mark done</button> <button>delete</button></div>
+      <div class="reminder">
+        <p>do homework</p>
+        <button class="typeIndicator">action</button><button>mark done</button>
+        <button>delete</button>
+      </div>
+      <div class="reminder">
+        <p>job interview</p>
+        <button class="typeIndicator">event [2026-March-01] (07:30)</button
+        ><button>mark done</button> <button>delete</button>
+      </div>
+      <div class="reminder">
+        <p>go to birthday party</p>
+        <button class="typeIndicator">event (08:30)</button
+        ><button>mark done</button> <button>delete</button>
+      </div>
     </div>
   </body>
 </html>

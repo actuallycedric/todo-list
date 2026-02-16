@@ -79,7 +79,7 @@ div {
   
 }
 
-.bio, .list{
+.bio, .reminder{
   border: 2px solid #e5989b;
   border-radius: 5px;
   width: max-content;
@@ -111,12 +111,15 @@ img {
 
 
 
-.greet {
+.header {
   display: flex;
   align-items: center;
 }
 
-
+.typeIndicator{
+  background-color: #b5838d;
+  color: #ffcdb2;
+}
 
 form > div {
   margin: 0;
