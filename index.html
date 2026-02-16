@@ -13,62 +13,38 @@
     />
   </head>
   <body>
-    <div class="header">
-      <h1>to-do list</h1>
+    <div class="super">
+      <div class="header">
+        <h1>To-do List</h1>
+      </div>
+
+      <button class="toggle">Add Item</button>
+      <div class="contact">
+        <form>
+          <input type="text" placeholder="Event name" />
+          <select>
+            <option value="">Reminder type:</option>
+            <option value="comment">Action</option>
+            <option value="question">Event</option>
+          </select>
+
+          <input type="text" placeholder="Event time" />
+
+          <button>Add</button>
+        </form>
+
+        <!--- make this section appear when a button is clicked -->
+      </div>
+
+      <div class="list"></div>
+
       <div class="stack">
-        <img src="./logo.png" alt="react logo" />
-        <img src="./supabase-icon.svg" alt="supabase logo" />
-        <img src="./javascript-logo-svgrepo-com.svg" alt="js logo" />
+        <img src="./images/React-icon.svg" alt="react logo" />
+        <img src="./images/supabase-icon.svg" alt="supabase logo" />
+        <img src="./images/javascript-logo-svgrepo-com.svg" alt="js logo" />
       </div>
     </div>
 
-    <div class="bio">
-      <h2>
-        i'm a grade 12 student and future student of the university of toronto.
-        i'm pursuing a degree in computer science, one of my passions. in the
-        future, i hope to become a competent full-stack web developer. try out
-        my to-do list!
-
-        <br /><br />
-        - clarence
-      </h2>
-    </div>
-
-    <div class="contact">
-      <form>
-        <input type="text" placeholder="event name" /><br />
-        <select>
-          <option value="">reminder type:</option>
-          <option value="comment">action</option>
-          <option value="question">event</option>
-        </select>
-
-        <input type="text" placeholder="event time" />
-
-        <button>add</button>
-      </form>
-
-      <!--- make this section appear when a button is clicked -->
-    </div>
-
-    <div class="header"><h1>currently:</h1></div>
-
-    <div class="list">
-      <div class="reminder">
-        <p>do homework</p>
-        <button class="typeIndicator">action</button><button>mark done</button>
-        <button>delete</button>
-      </div>
-      <div class="reminder">
-        <p>job interview</p>
-        <button class="typeIndicator">event [2026-March-01] (07:30)</button
-        ><button>mark done</button> <button>delete</button>
-      </div>
-      <div class="reminder">
-        <p>go to birthday party</p>
-        <button class="typeIndicator">event (08:30)</button
-        ><button>mark done</button> <button>delete</button>
-      </div>
-    </div>
+    <script src="./script.js"></script>
   </body>
 </html>
