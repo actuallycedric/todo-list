@@ -1,0 +1,136 @@
+* {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+
+  line-height: 1.25;
+  background-color: #6d6875;
+  color: #ffcdb2;
+
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 72px;
+  display: inline-block;
+  padding-right: 20px;
+  font-weight: bold;
+  
+}
+
+p {
+  font-size: 24px;
+  
+}
+
+a {
+  color: #ffb4a2;
+}
+
+
+.bio > h2 {
+  width: 830px;
+}
+
+hr {
+  background-color: #e5989b;
+  height: 2px;
+  border: none;
+  
+}
+
+button,
+select,
+option,
+input {
+  background-color: #ffcdb2;
+  color: #6d6875;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 5px;
+  margin: 5px;
+  margin-left: 0;
+  border-radius: 5px;
+  border: 0;
+  
+}
+
+input{
+  width: 200px;
+}
+
+
+
+button:hover {
+  transform: translateY(2px);
+  opacity: 0.9;
+}
+
+option:checked{
+  opacity: 0.9;
+}
+
+div {
+  padding: 10px;
+  margin: 25px;
+  
+  
+}
+
+.bio, .list{
+  border: 2px solid #e5989b;
+  border-radius: 5px;
+  width: max-content;
+}
+
+.reminder{
+  display: flex;
+  align-items: center;
+  margin: 5px;
+}
+
+.reminder p{
+  margin-right: 20px;
+}
+
+.stack{
+  border: none;
+}
+
+
+.tm{
+  padding-left: 25px;
+}
+
+img {
+  height: 50px;
+  width: 55px;
+}
+
+
+
+.greet {
+  display: flex;
+  align-items: center;
+}
+
+
+
+form > div {
+  margin: 0;
+  padding: 0;
+}
+
+footer > p {
+  padding: 20px;
+}
+
+
+
+ul{
+  padding: 25px;
+  font-size: 20px;
+}
+
