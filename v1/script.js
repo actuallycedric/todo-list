@@ -9,11 +9,14 @@ document.querySelector(".toggle").addEventListener("click", () => {
   else document.querySelector(".toggle").textContent = "Add Item";
 });
 
+// maps object to HTML
 const mapTask = (task) =>
   `<p>${task.text}</p> <div class="buttons">
             <button class="typeIndicator">${task.type}</button>
             <button>Mark Done</button> <button>Delete</button>
           </div>`;
+
+
 
 async function loadTask() {
   const res = await fetch(
@@ -30,8 +33,8 @@ async function loadTask() {
 
   // fetches the data from the Supabase db (async function waits for fetch to get data)
 
-  let data = await res.json(); // converts response to json
-  console.log(data);
+  let data = await res.json();
+  let data2 = data; // converts response to json
 
   data = data.map((task) => mapTask(task));
 
@@ -43,6 +46,12 @@ async function loadTask() {
     cont.innerHTML = task;
     document.querySelector(".list").appendChild(cont);
   });
+
+
+  return data2;
 }
 
-loadTask();
+const tasks = loadTask();
+
+
+

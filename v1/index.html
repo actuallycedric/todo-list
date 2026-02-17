@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-do List</title>
+    <link href="./styles.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+TC:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="super">
+      <div class="header">
+        <h1>To-do List</h1>
+      </div>
+
+      <button class="toggle">Add Item</button>
+      <div class="contact">
+        <form>
+          <input type="text" placeholder="Event name" />
+          <select>
+            <option value="">Reminder type:</option>
+            <option value="comment">Action</option>
+            <option value="question">Event</option>
+          </select>
+
+          <input type="text" placeholder="Event time" />
+
+          <button>Add</button>
+        </form>
+
+        <!--- make this section appear when a button is clicked -->
+      </div>
+
+      <div>
+        <button class="filterAction">Action</button>
+        <button class="filterEvent  ">Event</button>
+      </div>
+
+      <div class="list"></div>
+
+      <div class="stack">
+        <img src="./images/React-icon.svg" alt="react logo" />
+        <img src="./images/supabase-icon.svg" alt="supabase logo" />
+        <img src="./images/javascript-logo-svgrepo-com.svg" alt="js logo" />
+      </div>
+
+      <p>Clarence Cesante - 2026</p>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
