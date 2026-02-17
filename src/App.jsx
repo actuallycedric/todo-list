@@ -14,7 +14,7 @@ const colors = [
 
 function App() {
   return (
-    <div className="super">
+    <>
       <Header />
 
       <AddNewTask />
@@ -24,7 +24,7 @@ function App() {
       <TaskList />
 
       <Footer />
-    </div>
+    </>
   );
 }
 
@@ -36,13 +36,28 @@ function Header() {
   );
 }
 
-function AddNewTask() {
+function EventName() {
+  const [str, setStr] = useState("");
+
   return (
     <>
-      <button className="toggle">Add Item</button>
+      <span style={{ fontSize: "14px" }}>{200 - str.length}</span>
+      <input
+        type="text"
+        placeholder="Event name"
+        onInput={(e) => setStr(e.target.value)}
+      />
+    </>
+  );
+}
+
+function AddTaskGui() {
+  return (
+    <>
       <div className="contact">
         <form>
-          <input type="text" placeholder="Event name" />
+          <EventName />
+
           <select>
             <option value="">Reminder type:</option>
             <option value="comment">Action</option>
@@ -58,17 +73,43 @@ function AddNewTask() {
   );
 }
 
+function AddNewTask() {
+  const [showForm, setShowForm] = useState(false);
+
+  const btnText = (clicked) => (clicked === false ? "New Text" : "Close");
+
+  return (
+    <>
+      <button
+        className="toggle"
+        onClick={() => {
+          setShowForm(!showForm);
+        }}
+      >
+       {btnText(showForm)}
+      </button>
+      {showForm === false ? null : <AddTaskGui />}
+    </>
+  );
+}
+
 function FilterTask() {
   return (
-    <div>
+    <div className="stack">
       <button className="filterAction">Action</button>
       <button className="filterEvent  ">Event</button>
+
+      <p>There are {taskList.length} tasks remaining</p>
     </div>
   );
 }
 
 function TaskList() {
-  return <div className="list">{taskList.map((task) => mapTask(task))}</div>;
+  return (
+    <>
+      <div className="list">{taskList.map((task) => mapTask(task))}</div>
+    </>
+  );
 }
 
 function Footer() {
@@ -85,25 +126,27 @@ function Footer() {
   );
 }
 
-const mapTask = (task) => (
-  <>
+const mapTask = (task) => <Task key={task.id} taskObj={task} />;
+
+function Task({ taskObj }) {
+  return (
     <div className="reminder">
-      <p>{task.text}</p>{" "}
+      <p>{taskObj.text}</p>{" "}
       <div className="buttons">
         <button
           className="typeIndicator"
           style={{
-            backgroundImage: colors.find((color) => color.type === task.type)
-              .color,
+            backgroundImage: colors.find((color) => color.type === taskObj.type)
+              ?.color,
           }}
         >
-          {task.type}
+          {taskObj.type}
         </button>
         <button>Mark Done</button> <button>Delete</button>
       </div>
     </div>
-  </>
-);
+  );
+}
 
 async function loadTask() {
   const res = await fetch(

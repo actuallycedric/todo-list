@@ -12,7 +12,7 @@
   box-sizing: border-box;
 }
 
-.super {
+#root {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -75,6 +75,11 @@ button:hover {
   transition: 0.3s;
 }
 
+.list p{
+  padding: 10px;
+  font-size: 24px;
+}
+
 option:checked {
   opacity: 0.9;
 }
@@ -109,6 +114,11 @@ div {
   width: max-content;
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.stack p{
+  margin-left: 20px;
 }
 
 input::placeholder {
