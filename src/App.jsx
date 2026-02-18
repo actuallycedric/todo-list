@@ -14,13 +14,12 @@ const colors = [
 ];
 
 function App() {
-
   const [tasks, setTasks] = useState([]);
 
   useEffect(function () {
-    async function fetchTasks(){
-      const { data: list, error } = await supabase.from("list").select("*");
-      setTasks(list);
+    async function fetchTasks() {
+      const { data: tasks, error } = await supabase.from("list").select("*");
+      setTasks(tasks);
     }
 
     fetchTasks();
@@ -30,11 +29,11 @@ function App() {
     <>
       <Header />
 
-      <AddNewTask />
+      <AddNewTask taskList={tasks} />
 
-      <FilterTask />
+      <FilterTask taskList={tasks} />
 
-      <TaskList />
+      <TaskList taskList={tasks} />
 
       <Footer />
     </>
@@ -49,7 +48,7 @@ function Header() {
   );
 }
 
-function AddTaskGui() {
+function AddTaskGui({ taskList }) {
   const [str, setStr] = useState("");
   const [cat, setCat] = useState("");
   const [time, setTime] = useState("");
@@ -111,26 +110,23 @@ function AddNewTask() {
   );
 }
 
-
-function FilterTask() {
+function FilterTask({ taskList }) {
   return (
     <div className="stack">
+      <p>There are {taskList.length} tasks remaining</p>
       <button className="filterAction">Action</button>
       <button className="filterEvent  ">Event</button>
-
     </div>
   );
 }
 
-// function TaskList() {
-//   return (
-//     <>
-//       <div className="list">{taskList.map((task) => mapTask(task))}</div>
-//     </>
-//   );
-// }
-
-
+function TaskList({ taskList }) {
+  return (
+    <>
+      <div className="list">{taskList.map((task) => mapTask(task))}</div>
+    </>
+  );
+}
 
 function Footer() {
   return (
