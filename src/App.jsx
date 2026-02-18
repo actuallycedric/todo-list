@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./styles.css";
+import supabase from "./supabase";
 
 const colors = [
   {
@@ -13,6 +14,18 @@ const colors = [
 ];
 
 function App() {
+
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(function () {
+    async function fetchTasks(){
+      const { data: list, error } = await supabase.from("list").select("*");
+      setTasks(list);
+    }
+
+    fetchTasks();
+  }, []);
+
   return (
     <>
       <Header />
@@ -36,37 +49,42 @@ function Header() {
   );
 }
 
-function EventName() {
-  const [str, setStr] = useState("");
-
-  return (
-    <>
-      <span style={{ fontSize: "14px" }}>{200 - str.length}</span>
-      <input
-        type="text"
-        placeholder="Event name"
-        onInput={(e) => setStr(e.target.value)}
-      />
-    </>
-  );
-}
-
 function AddTaskGui() {
+  const [str, setStr] = useState("");
+  const [cat, setCat] = useState("");
+  const [time, setTime] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(str, cat, time);
+  }
+
   return (
     <>
       <div className="contact">
-        <form>
-          <EventName />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Event name"
+            value={str}
+            onChange={(e) => setStr(e.target.value)}
+          />
+          <span style={{ fontSize: "14px" }}>{200 - str.length}</span>
 
-          <select>
+          <select value={cat} onChange={(e) => setCat(e.target.value)}>
             <option value="">Reminder type:</option>
-            <option value="comment">Action</option>
-            <option value="question">Event</option>
+            <option value="Action">Action</option>
+            <option value="Event">Event</option>
           </select>
 
-          <input type="text" placeholder="Event time" />
+          <input
+            type="text"
+            placeholder="Event time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+          />
 
-          <button>Add</button>
+          <button type="submit">Add</button>
         </form>
       </div>
     </>
@@ -86,12 +104,13 @@ function AddNewTask() {
           setShowForm(!showForm);
         }}
       >
-       {btnText(showForm)}
+        {btnText(showForm)}
       </button>
-      {showForm === false ? null : <AddTaskGui />}
+      {!showForm ? null : <AddTaskGui />}
     </>
   );
 }
+
 
 function FilterTask() {
   return (
@@ -99,18 +118,19 @@ function FilterTask() {
       <button className="filterAction">Action</button>
       <button className="filterEvent  ">Event</button>
 
-      <p>There are {taskList.length} tasks remaining</p>
     </div>
   );
 }
 
-function TaskList() {
-  return (
-    <>
-      <div className="list">{taskList.map((task) => mapTask(task))}</div>
-    </>
-  );
-}
+// function TaskList() {
+//   return (
+//     <>
+//       <div className="list">{taskList.map((task) => mapTask(task))}</div>
+//     </>
+//   );
+// }
+
+
 
 function Footer() {
   return (
@@ -167,7 +187,5 @@ async function loadTask() {
 
   return data;
 }
-
-let taskList = await loadTask();
 
 export default App;
