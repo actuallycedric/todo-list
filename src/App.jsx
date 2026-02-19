@@ -23,12 +23,12 @@ function App() {
       async function fetchTasks() {
         setIsBuffering(true);
 
-        let query = supabase.from("list").select("*");
+        let query = supabase.from("list").select("").eq("is_deleted", false);
 
         if (categoryClicked !== "All") {
           query = query.eq("type", categoryClicked);
         } else {
-          query = supabase.from("list").select("*");
+          query = supabase.from("list").select("").eq("is_deleted", false);
         }
 
         const { data: tasks, error } = await query.limit(100);
@@ -58,7 +58,7 @@ function App() {
       <TaskList
         taskList={tasks}
         isBuffering={isBuffering}
-        setIsBuffering={setIsBuffering}
+        setTasks={setTasks}
       />
 
       <Footer />
@@ -91,13 +91,14 @@ function AddTaskGui({ setTasks, taskList, showForm, setShowForm }) {
     if (str && cat && time && str.length <= 200) {
       // add fact to ui
       setIsUploading(true);
-      const {data: task, error} = await supabase.from("list").insert([{text: str, type: cat, time}]).select();
-      
+      const { data: task, error } = await supabase
+        .from("list")
+        .insert([{ text: str, type: cat, time, is_deleted: false }])
+        .select();
 
-      if(!error) setTasks((taskList) => [task[0], ...taskList]);
-      
+      if (!error) setTasks((taskList) => [task[0], ...taskList]);
+
       setIsUploading(false);
-      
 
       // reset inputs
       setStr("");
@@ -134,7 +135,9 @@ function AddTaskGui({ setTasks, taskList, showForm, setShowForm }) {
             onChange={(e) => setTime(e.target.value)}
           />
 
-          <button type="submit" disabled={isUploading}>Add</button>
+          <button type="submit" disabled={isUploading}>
+            Add
+          </button>
         </form>
       </div>
     </>
@@ -168,7 +171,53 @@ function AddNewTask({ setTasks, taskList }) {
   );
 }
 
-function FilterTask({ taskList, categoryClicked, setCategoryClicked }) {
+function mapTask(task, setTasks, taskList) {
+  if (!task.is_deleted) {
+    return (
+      <>
+        <Task
+          taskList={taskList}
+          setTasks={setTasks}
+          key={task.id}
+          taskObj={task}
+        />
+      </>
+    );
+  }
+}
+
+function Task({ taskObj, setTasks, taskList }) {
+  async function handleDelete() {
+    taskList = taskList.filter((task) => task.id !== taskObj.id);
+
+    const { error } = await supabase
+      .from("list")
+      .update({ is_deleted: true })
+      .eq("id", taskObj.id)
+      .select();
+    setTasks(taskList);
+  }
+
+  return (
+    <div className="reminder">
+      <p>{taskObj.text}</p>{" "}
+      <div className="buttons">
+        <button
+          className="typeIndicator"
+          style={{
+            backgroundImage: colors.find((color) => color.type === taskObj.type)
+              ?.color,
+          }}
+        >
+          {taskObj.type}
+        </button>
+        <button onClick={handleDelete}>Mark Done</button>
+      </div>
+    </div>
+  );
+}
+
+function FilterTask({ taskList, setCategoryClicked }) {
   return (
     <div className="stack">
       <p>There are {taskList.length} tasks remaining</p>
@@ -206,11 +255,15 @@ function Buffer() {
   );
 }
 
-function TaskList({ taskList, isBuffering }) {
+function TaskList({ taskList, isBuffering, setTasks }) {
   return (
     <>
       <div className="list">
-        {isBuffering ? <Buffer /> : taskList.map((task) => mapTask(task))}
+        {isBuffering ? (
+          <Buffer />
+        ) : (
+          taskList.map((task) => mapTask(task, setTasks, taskList))
+        )}
       </div>
     </>
   );
@@ -227,28 +280,6 @@ function Footer() {
 
       <p>Clarence Cesante - 2026</p>
     </>
-  );
-}
-
-const mapTask = (task) => <Task key={task.id} taskObj={task} />;
-
-function Task({ taskObj }) {
-  return (
-    <div className="reminder">
-      <p>{taskObj.text}</p>{" "}
-      <div className="buttons">
-        <button
-          className="typeIndicator"
-          style={{
-            backgroundImage: colors.find((color) => color.type === taskObj.type)
-              ?.color,
-          }}
-        >
-          {taskObj.type}
-        </button>
-        <button>Mark Done</button> <button>Delete</button>
-      </div>
-    </div>
   );
 }
 
