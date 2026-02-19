@@ -15,25 +15,51 @@ const colors = [
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [isBuffering, setIsBuffering] = useState(false);
+  const [categoryClicked, setCategoryClicked] = useState("All");
 
-  useEffect(function () {
-    async function fetchTasks() {
-      const { data: tasks, error } = await supabase.from("list").select("*");
-      setTasks(tasks);
-    }
+  useEffect(
+    function () {
+      async function fetchTasks() {
+        setIsBuffering(true);
 
-    fetchTasks();
-  }, []);
+        let query = supabase.from("list").select("*");
+
+        if (categoryClicked !== "All") {
+          query = query.eq("type", categoryClicked);
+        } else {
+          query = supabase.from("list").select("*");
+        }
+
+        const { data: tasks, error } = await query.limit(100);
+
+        setTasks(tasks);
+
+        setIsBuffering(false);
+      }
+
+      fetchTasks();
+    },
+    [categoryClicked],
+  );
 
   return (
     <>
       <Header />
 
-      <AddNewTask taskList={tasks} />
+      <AddNewTask taskList={tasks} setTasks={setTasks} />
 
-      <FilterTask taskList={tasks} />
+      <FilterTask
+        taskList={tasks}
+        categoryClicked={categoryClicked}
+        setCategoryClicked={setCategoryClicked}
+      />
 
-      <TaskList taskList={tasks} />
+      <TaskList
+        taskList={tasks}
+        isBuffering={isBuffering}
+        setIsBuffering={setIsBuffering}
+      />
 
       <Footer />
     </>
@@ -48,14 +74,39 @@ function Header() {
   );
 }
 
-function AddTaskGui({ taskList }) {
+function AddTaskGui({ setTasks, taskList, showForm, setShowForm }) {
   const [str, setStr] = useState("");
   const [cat, setCat] = useState("");
   const [time, setTime] = useState("");
 
-  function handleSubmit(e) {
+  const [isUploading, setIsUploading] = useState(false);
+
+  async function handleSubmit(e) {
+    let task;
+    // prevent browser reload
     e.preventDefault();
-    console.log(str, cat, time);
+
+    // check if data is valid => create new fact obj
+
+    if (str && cat && time && str.length <= 200) {
+      // add fact to ui
+      setIsUploading(true);
+      const {data: task, error} = await supabase.from("list").insert([{text: str, type: cat, time}]).select();
+      
+
+      if(!error) setTasks((taskList) => [task[0], ...taskList]);
+      
+      setIsUploading(false);
+      
+
+      // reset inputs
+      setStr("");
+      setCat("");
+      setTime("");
+
+      // close form
+      setShowForm(!showForm);
+    }
   }
 
   return (
@@ -68,7 +119,7 @@ function AddTaskGui({ taskList }) {
             value={str}
             onChange={(e) => setStr(e.target.value)}
           />
-          <span style={{ fontSize: "14px" }}>{200 - str.length}</span>
+          <span style={{ fontSize: "14px" }}> {200 - str.length}</span>
 
           <select value={cat} onChange={(e) => setCat(e.target.value)}>
             <option value="">Reminder type:</option>
@@ -83,14 +134,14 @@ function AddTaskGui({ taskList }) {
             onChange={(e) => setTime(e.target.value)}
           />
 
-          <button type="submit">Add</button>
+          <button type="submit" disabled={isUploading}>Add</button>
         </form>
       </div>
     </>
   );
 }
 
-function AddNewTask() {
+function AddNewTask({ setTasks, taskList }) {
   const [showForm, setShowForm] = useState(false);
 
   const btnText = (clicked) => (clicked === false ? "New Text" : "Close");
@@ -105,25 +156,62 @@ function AddNewTask() {
       >
         {btnText(showForm)}
       </button>
-      {!showForm ? null : <AddTaskGui />}
+      {!showForm ? null : (
+        <AddTaskGui
+          setTasks={setTasks}
+          taskList={taskList}
+          showForm={showForm}
+          setShowForm={setShowForm}
+        />
+      )}
     </>
   );
 }
 
-function FilterTask({ taskList }) {
+function FilterTask({ taskList, categoryClicked, setCategoryClicked }) {
   return (
     <div className="stack">
       <p>There are {taskList.length} tasks remaining</p>
-      <button className="filterAction">Action</button>
-      <button className="filterEvent  ">Event</button>
+      <button
+        className="filterAction"
+        onClick={(e) => setCategoryClicked(e.target.innerHTML)}
+      >
+        Action
+      </button>
+
+      <button
+        className="filterEvent"
+        onClick={(e) => setCategoryClicked(e.target.innerHTML)}
+      >
+        Event
+      </button>
+
+      <button
+        className="filterEvent"
+        onClick={(e) => {
+          setCategoryClicked(e.target.innerHTML);
+        }}
+      >
+        All
+      </button>
     </div>
   );
 }
 
-function TaskList({ taskList }) {
+function Buffer() {
+  return (
+    <div className="buffer">
+      <p>Loading...</p>
+    </div>
+  );
+}
+
+function TaskList({ taskList, isBuffering }) {
   return (
     <>
-      <div className="list">{taskList.map((task) => mapTask(task))}</div>
+      <div className="list">
+        {isBuffering ? <Buffer /> : taskList.map((task) => mapTask(task))}
+      </div>
     </>
   );
 }

@@ -19,6 +19,10 @@
   margin: 0 auto;
 }
 
+.buffer{
+  border-radius: 10px;
+}
+
 h1 {
   font-size: 96px;
   display: inline-block;
