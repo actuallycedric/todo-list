@@ -4,12 +4,15 @@
   font-weight: 300;
 
   line-height: 1.25;
-  background-color: #1b263b;
-  color: #e0e1dd;
 
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+body{ 
+  background-color: #1b263b;
+  color: #e0e1dd;
 }
 
 #root {
@@ -51,7 +54,7 @@ hr {
 button,
 select,
 option,
-input {
+#eventField {
   background-color: #5c677d;
   color: #e0e1dd;
   font-size: 20px;
@@ -61,7 +64,7 @@ input {
   border: 0;
 }
 
-input {
+#eventField {
   max-width: 200px;
   width: 100%;
 }
@@ -69,7 +72,8 @@ input {
 .filter{
   margin-top: 20px;
 }
-button, select{
+
+#eventField, .stylebutton, select{
   background-image: linear-gradient(to right, #6b4e71, #53687e);
 }
 
@@ -88,7 +92,7 @@ option:checked {
   opacity: 0.9;
 }
 
-div {
+.card {
   padding: 10px;
   margin: 25px;
 
@@ -97,6 +101,7 @@ div {
 
 .reminder {
   display: flex;
+  background-color: #1b263b;
   align-items: center;
   justify-content: space-between;
   margin: 5px;
@@ -125,7 +130,7 @@ div {
   margin-left: 20px;
 }
 
-input::placeholder {
+#eventField::placeholder {
   color: #e0e1dd;
 }
 
@@ -205,8 +210,9 @@ ul {
   .buttons button {
     font-size: 15px;
   }
+
   form,
-  input,
+  #eventField,
   select,
   .contact button {
     margin: 10px;

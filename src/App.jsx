@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import "./styles.css";
-import supabase from "./supabase";
+import AddTaskGui from "./AddTaskGui";
+import supabase from './supabase'
+import dayjs from 'dayjs'
+
+
 
 const colors = [
   {
@@ -68,81 +72,13 @@ function App() {
 
 function Header() {
   return (
-    <div className="header">
+    <div className="header card">
       <h1>To-do List</h1>
     </div>
   );
 }
 
-function AddTaskGui({ setTasks, taskList, showForm, setShowForm }) {
-  const [str, setStr] = useState("");
-  const [cat, setCat] = useState("");
-  const [time, setTime] = useState("");
 
-  const [isUploading, setIsUploading] = useState(false);
-
-  async function handleSubmit(e) {
-    let task;
-    // prevent browser reload
-    e.preventDefault();
-
-    // check if data is valid => create new fact obj
-
-    if (str && cat && time && str.length <= 200) {
-      // add fact to ui
-      setIsUploading(true);
-      const { data: task, error } = await supabase
-        .from("list")
-        .insert([{ text: str, type: cat, time, is_deleted: false }])
-        .select();
-
-      if (!error) setTasks((taskList) => [task[0], ...taskList]);
-
-      setIsUploading(false);
-
-      // reset inputs
-      setStr("");
-      setCat("");
-      setTime("");
-
-      // close form
-      setShowForm(!showForm);
-    }
-  }
-
-  return (
-    <>
-      <div className="contact">
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Event name"
-            value={str}
-            onChange={(e) => setStr(e.target.value)}
-          />
-          <span style={{ fontSize: "14px" }}> {200 - str.length}</span>
-
-          <select value={cat} onChange={(e) => setCat(e.target.value)}>
-            <option value="">Reminder type:</option>
-            <option value="Action">Action</option>
-            <option value="Event">Event</option>
-          </select>
-
-          <input
-            type="text"
-            placeholder="Event time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          />
-
-          <button type="submit" disabled={isUploading}>
-            Add
-          </button>
-        </form>
-      </div>
-    </>
-  );
-}
 
 function AddNewTask({ setTasks, taskList }) {
   const [showForm, setShowForm] = useState(false);
@@ -152,7 +88,7 @@ function AddNewTask({ setTasks, taskList }) {
   return (
     <>
       <button
-        className="toggle"
+        className="toggle stylebutton"
         onClick={() => {
           setShowForm(!showForm);
         }}
@@ -195,15 +131,16 @@ function Task({ taskObj, setTasks, taskList }) {
       .update({ is_deleted: true })
       .eq("id", taskObj.id)
       .select();
+
     setTasks(taskList);
   }
 
   return (
-    <div className="reminder">
+    <div className="reminder card">
       <p>{taskObj.text}</p>{" "}
-      <div className="buttons">
+      <div className="buttons card">
         <button
-          className="typeIndicator"
+          className="typeIndicator stylebutton"
           style={{
             backgroundImage: colors.find((color) => color.type === taskObj.type)
               ?.color,
@@ -211,7 +148,10 @@ function Task({ taskObj, setTasks, taskList }) {
         >
           {taskObj.type}
         </button>
-        <button onClick={handleDelete}>Mark Done</button>
+        <button className="stylebutton" onClick={handleDelete}>
+          Mark Done
+        </button>
+        <button className="stylebutton">{taskObj.countdown}h left</button>
       </div>
     </div>
   );
@@ -219,24 +159,24 @@ function Task({ taskObj, setTasks, taskList }) {
 
 function FilterTask({ taskList, setCategoryClicked }) {
   return (
-    <div className="stack">
+    <div className="stack card">
       <p>There are {taskList.length} tasks remaining</p>
       <button
-        className="filterAction"
+        className="filterAction stylebutton"
         onClick={(e) => setCategoryClicked(e.target.innerHTML)}
       >
         Action
       </button>
 
       <button
-        className="filterEvent"
+        className="filterEvent stylebutton"
         onClick={(e) => setCategoryClicked(e.target.innerHTML)}
       >
         Event
       </button>
 
       <button
-        className="filterEvent"
+        className="filterEvent stylebutton"
         onClick={(e) => {
           setCategoryClicked(e.target.innerHTML);
         }}
@@ -249,7 +189,7 @@ function FilterTask({ taskList, setCategoryClicked }) {
 
 function Buffer() {
   return (
-    <div className="buffer">
+    <div className="buffer card">
       <p>Loading...</p>
     </div>
   );
@@ -258,9 +198,9 @@ function Buffer() {
 function TaskList({ taskList, isBuffering, setTasks }) {
   return (
     <>
-      <div className="list">
+      <div className="list card">
         {isBuffering ? (
-          <Buffer />
+          <Buffer key={Math.random() * 1000} />
         ) : (
           taskList.map((task) => mapTask(task, setTasks, taskList))
         )}
@@ -272,7 +212,7 @@ function TaskList({ taskList, isBuffering, setTasks }) {
 function Footer() {
   return (
     <>
-      <div className="stack">
+      <div className="stack card">
         <img src="./images/React-icon.svg" alt="react logo" />
         <img src="./images/supabase-icon.svg" alt="supabase logo" />
         <img src="./images/javascript-logo-svgrepo-com.svg" alt="js logo" />
