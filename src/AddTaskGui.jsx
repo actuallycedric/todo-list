@@ -48,9 +48,7 @@ export default function AddTaskGui({
     if (str && cat && time && str.length <= 200) {
       // add fact to ui
       setIsUploading(true);
-      let countdownMs = time.diff(dayjs());
-
-      let countdownMinutes = Math.round(dayjs.duration(countdownMs).asMinutes());
+      
 
       const { data: task, error } = await supabase
         .from("list")
@@ -59,7 +57,6 @@ export default function AddTaskGui({
             text: str,
             type: cat,
             time,
-            countdown: countdownMinutes,
             is_deleted: false,
           },
         ])

@@ -77,6 +77,11 @@ option,
   background-image: linear-gradient(to right, #6b4e71, #53687e);
 }
 
+.taskbutton{
+  width: max-content;
+}
+
+
 button:hover {
   transform: translateY(2px);
   opacity: 0.9;
@@ -232,6 +237,6 @@ ul {
     font-size: 11px;
   }
   .buttons {
-    height: 70px;
+    height: 80px;
   }
 }

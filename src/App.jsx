@@ -3,6 +3,9 @@ import "./styles.css";
 import AddTaskGui from "./AddTaskGui";
 import supabase from "./supabase";
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+
+dayjs.extend(duration);
 
 const colors = [
   {
@@ -131,7 +134,24 @@ function Task({ taskObj, setTasks, taskList }) {
     if (!error) setTasks(taskList);
   }
 
-  const [countdown, setCountdown] = useState(taskObj.countdown);
+  let cnt = dayjs(taskObj.time).diff(dayjs());
+
+  const [countdown, setCountdown] = useState(
+    Math.round(dayjs.duration(cnt).asMinutes()),
+  );
+
+  async function updateCountdown(countdown) {
+    const { error } = await supabase
+      .from("list")
+      .update({ countdown: countdown })
+      .eq("id", taskObj.id)
+      .select();
+  }
+
+  useEffect(() => {
+    if (!taskObj?.id) return;
+    updateCountdown(countdown);
+  }, [taskObj?.id]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -140,6 +160,7 @@ function Task({ taskObj, setTasks, taskList }) {
 
     return () => {
       clearInterval(intervalId);
+      updateCountdown(countdown);
     };
   }, []);
 
@@ -159,7 +180,9 @@ function Task({ taskObj, setTasks, taskList }) {
         <button className='stylebutton' onClick={handleDelete}>
           Mark Done
         </button>
-        <button className='stylebutton'>{Math.round(countdown/60)}h {Math.round(countdown%60)}m left</button>
+        <button className='stylebutton taskbutton'>
+          {Math.round(countdown / 60)}h {Math.round(countdown % 60)}m
+        </button>
       </div>
     </div>
   );
