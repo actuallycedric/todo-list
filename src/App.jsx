@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import "./styles.css";
 import AddTaskGui from "./AddTaskGui";
-import supabase from './supabase'
-import dayjs from 'dayjs'
-
-
+import supabase from "./supabase";
+import dayjs from "dayjs";
 
 const colors = [
   {
@@ -72,13 +70,11 @@ function App() {
 
 function Header() {
   return (
-    <div className="header card">
+    <div className='header card'>
       <h1>To-do List</h1>
     </div>
   );
 }
-
-
 
 function AddNewTask({ setTasks, taskList }) {
   const [showForm, setShowForm] = useState(false);
@@ -88,7 +84,7 @@ function AddNewTask({ setTasks, taskList }) {
   return (
     <>
       <button
-        className="toggle stylebutton"
+        className='toggle stylebutton'
         onClick={() => {
           setShowForm(!showForm);
         }}
@@ -132,15 +128,27 @@ function Task({ taskObj, setTasks, taskList }) {
       .eq("id", taskObj.id)
       .select();
 
-    setTasks(taskList);
+    if (!error) setTasks(taskList);
   }
 
+  const [countdown, setCountdown] = useState(taskObj.countdown);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCountdown((countdown) => countdown - 1);
+    }, 60000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   return (
-    <div className="reminder card">
+    <div className='reminder card'>
       <p>{taskObj.text}</p>{" "}
-      <div className="buttons card">
+      <div className='buttons card'>
         <button
-          className="typeIndicator stylebutton"
+          className='typeIndicator stylebutton'
           style={{
             backgroundImage: colors.find((color) => color.type === taskObj.type)
               ?.color,
@@ -148,37 +156,63 @@ function Task({ taskObj, setTasks, taskList }) {
         >
           {taskObj.type}
         </button>
-        <button className="stylebutton" onClick={handleDelete}>
+        <button className='stylebutton' onClick={handleDelete}>
           Mark Done
         </button>
-        <button className="stylebutton">{taskObj.countdown}h left</button>
+        <button className='stylebutton'>{Math.round(countdown/60)}h {Math.round(countdown%60)}m left</button>
       </div>
     </div>
   );
 }
 
 function FilterTask({ taskList, setCategoryClicked }) {
+  const [isSelected, setIsSelected] = useState(null);
+
+  const buttons = ["Action", "Event", "All"];
+
   return (
-    <div className="stack card">
+    <div className='stack card'>
       <p>There are {taskList.length} tasks remaining</p>
       <button
-        className="filterAction stylebutton"
-        onClick={(e) => setCategoryClicked(e.target.innerHTML)}
+        className='filterAction stylebutton'
+        style={
+          isSelected === buttons.indexOf("Action")
+            ? { border: "1px solid white" }
+            : {}
+        }
+        onClick={(e) => {
+          setCategoryClicked("Action");
+          setIsSelected(buttons.indexOf("Action"));
+        }}
       >
         Action
       </button>
 
       <button
-        className="filterEvent stylebutton"
-        onClick={(e) => setCategoryClicked(e.target.innerHTML)}
+        className='filterEvent stylebutton'
+        style={
+          isSelected === buttons.indexOf("Event")
+            ? { border: "1px solid white" }
+            : {}
+        }
+        onClick={(e) => {
+          setCategoryClicked("Event");
+          setIsSelected(buttons.indexOf("Event"));
+        }}
       >
         Event
       </button>
 
       <button
-        className="filterEvent stylebutton"
+        className='filterEvent stylebutton'
+        style={
+          isSelected === buttons.indexOf("All")
+            ? { border: "1px solid white" }
+            : {}
+        }
         onClick={(e) => {
-          setCategoryClicked(e.target.innerHTML);
+          setCategoryClicked("All");
+          setIsSelected(buttons.indexOf("All"));
         }}
       >
         All
@@ -189,7 +223,7 @@ function FilterTask({ taskList, setCategoryClicked }) {
 
 function Buffer() {
   return (
-    <div className="buffer card">
+    <div className='buffer card'>
       <p>Loading...</p>
     </div>
   );
@@ -198,7 +232,7 @@ function Buffer() {
 function TaskList({ taskList, isBuffering, setTasks }) {
   return (
     <>
-      <div className="list card">
+      <div className='list card'>
         {isBuffering ? (
           <Buffer key={Math.random() * 1000} />
         ) : (
@@ -212,10 +246,10 @@ function TaskList({ taskList, isBuffering, setTasks }) {
 function Footer() {
   return (
     <>
-      <div className="stack card">
-        <img src="./images/React-icon.svg" alt="react logo" />
-        <img src="./images/supabase-icon.svg" alt="supabase logo" />
-        <img src="./images/javascript-logo-svgrepo-com.svg" alt="js logo" />
+      <div className='stack card'>
+        <img src='./images/React-icon.svg' alt='react logo' />
+        <img src='./images/supabase-icon.svg' alt='supabase logo' />
+        <img src='./images/javascript-logo-svgrepo-com.svg' alt='js logo' />
       </div>
 
       <p>Clarence Cesante - 2026</p>

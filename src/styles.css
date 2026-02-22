@@ -113,7 +113,7 @@ option:checked {
 }
 
 .reminder p{
-  max-width: 300px;
+  max-width: max-content;
   font-size: 30px;
 }
 
