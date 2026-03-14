@@ -61,10 +61,8 @@ The app should now be running locally.
 
 ## Future Improvements
 
-* Task deletion and editing
 * Task completion states
 * User authentication
-* Filtering and sorting tasks
 * Improved UI/UX
 
 ## License
