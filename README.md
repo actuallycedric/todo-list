@@ -1,16 +1,72 @@
-# React + Vite
+# To-Do List (React + Supabase)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple full-stack to-do list application built to experiment with modern front-end tooling and basic backend integration.
 
-Currently, two official plugins are available:
+The application allows users to create and store tasks, with all task data persisted in a **Supabase** database rather than local state. This project was primarily built as a learning exercise to understand how a React front-end can communicate with a hosted backend service.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+* Add new tasks to a persistent database
+* Retrieve tasks from Supabase on load
+* Simple and responsive UI
+* Basic client → backend data flow using Supabase
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+* **HTML5** – Page structure
+* **CSS3** – Styling and layout
+* **React.js** – Component-based front-end
+* **Supabase** – Backend database and API layer
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Purpose
+
+This project was built to:
+
+* Practice building a small React application
+* Learn how to integrate a frontend with a hosted backend service
+* Understand basic CRUD-style interactions with a database
+* Explore how modern web apps persist data beyond local storage
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/todo-list.git
+cd todo-list
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file and add your Supabase credentials:
+
+```
+VITE_SUPABASE_URL=your_project_url
+VITE_SUPABASE_ANON_KEY=your_anon_key
+```
+
+### 4. Run the development server
+
+```bash
+npm run dev
+```
+
+The app should now be running locally.
+
+## Future Improvements
+
+* Task deletion and editing
+* Task completion states
+* User authentication
+* Filtering and sorting tasks
+* Improved UI/UX
+
+## License
+
+This project is for learning purposes.
